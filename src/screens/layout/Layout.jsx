@@ -23,8 +23,10 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import News from '../News';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 import { useParams } from 'react-router-dom'
-import { getData } from '../../config/firebase/firebaseMethods';
+import { checkUser, getData } from '../../config/firebase/firebaseMethods';
 import Home from '../Home';
+import { Button } from '@mui/material';
+import { logOut } from '../../config/firebase/firebaseMethods'
 
 
 const drawerWidth = 240;
@@ -120,10 +122,28 @@ export default function Layout() {
 
     const params = useParams();
 
+    const signOut = () => {
+        logOut().then((res) => {
+            console.log("logout", res);
+            navigate("/")
+
+        }).catch((error) => {
+            console.log(error);
+        })
+
+    }
+    
+    
 
     React.useEffect(() => {
 
-
+        checkUser().then((user) => {
+            if(user.status === "User Not Found!"){
+                 navigate("/");
+                //console.log("uid",user.id)
+                //console.log("status",user.status)
+            }
+        })
 
     }, [])
 
@@ -132,22 +152,25 @@ export default function Layout() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        News App
-                    </Typography>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: 5,
+                                ...(open && { display: 'none' }),
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            News App
+                        </Typography>
+                    </Box>
+                    <Button variant='contained' sx={{ border: '2px solid' }} onClick={signOut}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -190,7 +213,7 @@ export default function Layout() {
                 <Routes>
                     <Route path="news" element={<News />} />
                     <Route path="" element={<Home />} />
-                    
+
                 </Routes>
 
 

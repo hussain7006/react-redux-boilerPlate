@@ -6,10 +6,11 @@ import AppRouter from './config/routes/AppRouter';
 function App() {
   return (
     <div className="App">
+
       <Provider store={store}>
         <AppRouter />
-
       </Provider>
+
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import app from "./firebaseConfig";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, set, onValue, get, push, child } from "firebase/database";
 
 const auth = getAuth(app);
 const database = getDatabase(app);
+const user = auth.currentUser;
 
 
 let signUp = (obj) => {
@@ -16,9 +17,24 @@ let logIn = (obj) => {
     return signInWithEmailAndPassword(auth, email, password)
 }
 
-let logOut = () => { }
+let logOut = () => {
+    return signOut(auth);
+}
 
-let checkUser = () => { }
+let checkUser = () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                resolve({ "id": uid, status: "User Found" })
+            } else {
+                resolve({ "id": "", status: "User Not Found!" })
+            }
+        });
+
+    })
+
+}
 
 
 // Database methods
@@ -42,5 +58,7 @@ export {
     signUp,
     logIn,
     sendData,
-    getData
+    getData,
+    logOut,
+    checkUser
 }

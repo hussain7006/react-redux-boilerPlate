@@ -47,19 +47,36 @@ function Home() {
 
 
 
-        getData('todos').then((snapshot) => {
+        // getData('todos').then((snapshot) => {
+        //     if (snapshot.exists()) {
+
+        //         // setTodos([snapshot.val()])               // if getting data by id then use this
+        //         let Todos = Object.values(snapshot.val());  // if getting complete data then use this
+        //         setTodos(Todos)
+
+        //     } else {
+        //         console.log("No data available");
+        //     }
+        // }).catch((error) => {
+        //     console.error(error);
+        // });
+
+
+        getData("users").then((snapshot) => {
+            console.log("names")
+
             if (snapshot.exists()) {
 
                 // setTodos([snapshot.val()])               // if getting data by id then use this
-                let Todos = Object.values(snapshot.val());  // if getting complete data then use this
-                setTodos(Todos)
+                let userNames = Object.values(snapshot.val());  // if getting complete data then use this
+                setUserNames(userNames)
 
             } else {
                 console.log("No data available");
             }
-        }).catch((error) => {
-            console.error(error);
-        });
+        }).catch((err) => {
+
+        })
 
 
     }, [])
@@ -68,23 +85,9 @@ function Home() {
             <Typography variant='h1'>Home Page</Typography>
 
             <Box>
-                {/* {users.length > 0 ?
-                    <Box>
-                        {users.map((e, i) => <li>{e.name}</li>)}
-                    </Box> :
-                    <Box>
-                        <Typography variant='h4'>Loading...</Typography>
-                    </Box>
-                } */}
-                {/* <ul>
-                    {todos.length ? todos.map((e, i) => <li key={i}>{e.todo}</li>)
-                        : <Typography variant='h3'>Loading...</Typography>}
-                </ul> */}
-
                 <Button variant='contained' onClick={getUsers}>Get Users</Button>
-
                 <ul>
-                    {userNames.length ? userNames.map((e, i) => <li key={i}>{e.name}</li>)
+                    {userNames.length ? userNames.map((e, i) => <li key={i}>{e.email}</li>)
                         : <Typography variant='h3'>Loading...</Typography>}
                 </ul>
             </Box>
